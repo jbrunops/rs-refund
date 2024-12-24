@@ -20,10 +20,13 @@ amount.oninput = () => {
 // Função para formatar o valor
 function formatCurrencyBRL(value) {
   // Formatando o valor no padrão BRL
-  value = value.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
+  value = value
+    .toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    })
+    .replace("R$", "")
+    .trim();
   // Retorna o valor formatado
   return value;
 }
@@ -69,8 +72,21 @@ function expenseAdd(newExpense) {
     // Adicionar name e category em expense info (div: informações da despesa)
     expenseInfo.append(expenseName, expenseCategory);
 
+    // Criar o valor da despesa
+    const expenseAmount = document.createElement("span");
+    expenseAmount.classList.add("expense-amount");
+    expenseAmount.innerHTML = `<small>R$</small>${newExpense.amount
+      .toUpperCase()
+      .replace("R$", "")}`;
+
+    // Cria o ícone de remover
+    const removeIcon = document.createElement("img");
+    removeIcon.classList.add("remove-icon");
+    removeIcon.setAttribute("src", "img/remove.svg");
+    removeIcon.setAttribute("alt", "remove");
+
     // Adiciona as informações no item.
-    expenseItem.append(expenseIcon, expenseInfo);
+    expenseItem.append(expenseIcon, expenseInfo, expenseAmount, removeIcon);
 
     // Adicionar o item na lista
     expenseList.append(expenseItem);
@@ -82,3 +98,5 @@ function expenseAdd(newExpense) {
 
 // ERROS:
 // 1 - o form estava sem o ID form (corrigido)
+// 2 - não é criar como span, e sim small (<span>R$</span>) (.expense-amount small no css), porém, não estava formatando porque eu tinha criado expense.amount, mas era expense-amount.
+// 3 - A imagem não estava aprecendo porque eu tinha esquecido de adicionar 'removeIcon' nas informações do item.
