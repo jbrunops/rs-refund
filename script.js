@@ -7,6 +7,7 @@ const form = document.getElementById("form");
 // Seleciona os elementos da lista.
 const expenseList = document.querySelector("ul");
 const expensesQuantity = document.querySelector("aside header p span");
+const expensesTotal = document.querySelector("aside header h2");
 
 // Input só aceitando números agora!
 amount.oninput = () => {
@@ -21,13 +22,10 @@ amount.oninput = () => {
 // Função para formatar o valor
 function formatCurrencyBRL(value) {
   // Formatando o valor no padrão BRL
-  value = value
-    .toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    })
-    .replace("R$", "")
-    .trim();
+  value = value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
   // Retorna o valor formatado
   return value;
 }
@@ -111,6 +109,32 @@ function updateTotals() {
     expensesQuantity.textContent = `${items.length} ${
       items.length > 1 ? "despesas" : "despesa"
     }`;
+
+    // Variável para incrementar o total.
+    let total = 0;
+    // Percorrer cada item (li) da lista (ul)
+    for (let item = 0; item < items.length; item++) {
+      const itemAmount = items[item].querySelector(".expense-amount");
+
+      let value = itemAmount.textContent
+        .replace(/[^\d,]/g, "")
+        .replace(",", ".");
+
+      // Converter o valor para float
+      value = parseFloat(value);
+
+      // verificar se é um número válido
+      if (isNaN(value)) {
+        return alert(
+          "Não foi possível calcular o total. O valor não parece ser um número"
+        );
+      }
+
+      // Calcular o total
+      total += Number(value);
+    }
+
+    expensesTotal.textContent = formatCurrencyBRL(total);
   } catch (error) {
     console.log(error);
     alert("Não foi possível atualizar os totais");
@@ -122,3 +146,4 @@ function updateTotals() {
 // 2 - não é criar como span, e sim small (<span>R$</span>) (.expense-amount small no css), porém, não estava formatando porque eu tinha criado expense.amount, mas era expense-amount.
 // 3 - A imagem não estava aprecendo porque eu tinha esquecido de adicionar 'removeIcon' nas informações do item.
 // 4 - Certo: ${items.length} ${items.length > 1 ? "despesas" : "despesa"}`; Errado: ${items.length} ${items.length} > 1 ? "despesas" : "despesa"`
+// 5 - Errei a expressão regex /[^\d,]/g, a vírgula é depois da letra d.
