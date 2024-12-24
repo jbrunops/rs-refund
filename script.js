@@ -163,7 +163,7 @@ function formClear() {
   category.value = "";
   amount.value = "";
 
-  // COlocar o foco no input
+  // Colocar o foco no input
   expense.focus();
 }
 
