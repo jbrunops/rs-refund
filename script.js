@@ -6,6 +6,7 @@ const form = document.getElementById("form");
 
 // Seleciona os elementos da lista.
 const expenseList = document.querySelector("ul");
+const expensesQuantity = document.querySelector("aside header p span");
 
 // Input só aceitando números agora!
 amount.oninput = () => {
@@ -46,6 +47,7 @@ form.onsubmit = (event) => {
   expenseAdd(newExpense);
 };
 
+// Adiciona um novo item na lista
 function expenseAdd(newExpense) {
   try {
     // Criar o elemento para adicionar na lista.
@@ -90,9 +92,28 @@ function expenseAdd(newExpense) {
 
     // Adicionar o item na lista
     expenseList.append(expenseItem);
+
+    // Atualiza os totais
+    updateTotals();
   } catch (error) {
     alert("Não foi possível atualizar a lista de despesas.");
     console.log(error);
+  }
+}
+
+// Atualiza os totais
+function updateTotals() {
+  try {
+    // Recupera todos os itens (li) da lista (ul)
+    const items = expenseList.children;
+
+    // Atualiza a quantidade de itens da lista
+    expensesQuantity.textContent = `${items.length} ${
+      items.length > 1 ? "despesas" : "despesa"
+    }`;
+  } catch (error) {
+    console.log(error);
+    alert("Não foi possível atualizar os totais");
   }
 }
 
@@ -100,3 +121,4 @@ function expenseAdd(newExpense) {
 // 1 - o form estava sem o ID form (corrigido)
 // 2 - não é criar como span, e sim small (<span>R$</span>) (.expense-amount small no css), porém, não estava formatando porque eu tinha criado expense.amount, mas era expense-amount.
 // 3 - A imagem não estava aprecendo porque eu tinha esquecido de adicionar 'removeIcon' nas informações do item.
+// 4 - Certo: ${items.length} ${items.length > 1 ? "despesas" : "despesa"}`; Errado: ${items.length} ${items.length} > 1 ? "despesas" : "despesa"`
