@@ -141,6 +141,19 @@ function updateTotals() {
   }
 }
 
+// Evento que captura o clique nos itens da lista.
+expenseList.addEventListener("click", function (event) {
+  if (event.target.classList.contains("remove-icon")) {
+    // Obter o li pai do elemento clicado.
+    const item = event.target.closest(".expense");
+    // Temove item da lista
+    item.remove();
+  }
+
+  // Atualiza os totais
+  updateTotals();
+});
+
 // ERROS:
 // 1 - o form estava sem o ID form (corrigido)
 // 2 - não é criar como span, e sim small (<span>R$</span>) (.expense-amount small no css), porém, não estava formatando porque eu tinha criado expense.amount, mas era expense-amount.
